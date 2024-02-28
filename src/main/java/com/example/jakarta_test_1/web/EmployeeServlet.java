@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet("/")
+@WebServlet("/employee")
 public class EmployeeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private EmployeeDAO employeeDAO;
