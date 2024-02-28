@@ -11,6 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet("/")
@@ -22,11 +25,13 @@ public class EmployeeServlet extends HttpServlet {
         employeeDAO = new EmployeeDAO();
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request, response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getServletPath();
@@ -37,16 +42,16 @@ public class EmployeeServlet extends HttpServlet {
                     showNewForm(request, response);
                     break;
                 case "/insert":
-                    insertEmployee(request, response);
+                    insertUser(request, response);
                     break;
                 case "/delete":
-                    deleteEmployee(request, response);
+                    deleteUser(request, response);
                     break;
                 case "/edit":
                     showEditForm(request, response);
                     break;
                 case "/update":
-                    updateEmployee(request, response);
+                    updateUser(request, response);
                     break;
                 default:
                     listUser(request, response);
@@ -56,6 +61,7 @@ public class EmployeeServlet extends HttpServlet {
             throw new ServletException(ex);
         }
     }
+
 
     private void listUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
@@ -85,23 +91,51 @@ public class EmployeeServlet extends HttpServlet {
             throws SQLException, IOException {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
-        String phone = request.getParameter("country");
-        Employee newUser = new Employee(name, email, phone);
+        String phone = request.getParameter("phone");
+        String birthdayStr = request.getParameter("birthday");
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
+        Date birthday = null;
+        try {
+            birthday = dateFormat.parse(birthdayStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Employee newUser = new Employee(name, email, phone, birthday);
         employeeDAO.insertEmployee(newUser);
         response.sendRedirect("list");
     }
+
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");
         String email = request.getParameter("email");
-        String phone = request.getParameter("country");
+        String phone = request.getParameter("phone");
+        String birthdayStr = request.getParameter("birthday");
 
-        Employee book = new Employee(id, name, email, phone);
-        employeeDAO.updateEmployee(book);
+        // Assuming "MM/dd/yyyy" is the expected date format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
+        Date birthday = null;
+        try {
+            birthday = dateFormat.parse(birthdayStr);
+            // Now, 'birthday' contains the parsed Date object
+        } catch (ParseException e) {
+            // Handle the exception if the date string is not in the expected format
+            e.printStackTrace();
+        }
+
+        // Use the parsed Date object when creating the Employee object
+        Employee employee = new Employee(id, name, email, phone, birthday);
+        employeeDAO.updateEmployee(employee);
         response.sendRedirect("list");
     }
+
 
     private void deleteUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
