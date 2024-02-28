@@ -10,15 +10,15 @@ import java.util.List;
 public class EmployeeDAO {
     private String jdbcURL = "jdbc:mysql://localhost:3306/hr_manage?useSSL=false";
     private String jdbcUsername = "root";
-    private String jdbcPassword = "";
+    private String jdbcPassword = "root";
 
-    private static final String INSERT_EMPLOYEES_SQL = "INSERT INTO employees" + "  (name, email, phone, birthday) VALUES "
+    private static final String INSERT_EMPLOYEES_SQL = "INSERT INTO employee" + "  (name, email, phone, birthday) VALUES "
             + " (?, ?, ?, ?);";
 
     private static final String SELECT_EMPLOYEES_BY_ID = "select id,name,email,phone,birthday from employees where id =?";
-    private static final String SELECT_ALL_EMPLOYEES = "select * from employees";
-    private static final String DELETE_EMPLOYEES_SQL = "delete from employees where id = ?;";
-    private static final String UPDATE_EMPLOYEES_SQL = "update employees set name = ?,email= ?, phone =?, birthday =? where id = ?;";
+    private static final String SELECT_ALL_EMPLOYEES = "select * from employee";
+    private static final String DELETE_EMPLOYEES_SQL = "delete from employee where id = ?;";
+    private static final String UPDATE_EMPLOYEES_SQL = "update employee set name = ?,email= ?, phone =?, birthday =? where id = ?;";
 
     public EmployeeDAO() {
     }
