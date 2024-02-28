@@ -68,7 +68,7 @@ public class Employee {
         this.phone = phone;
     }
     public java.sql.Date getBirthday() {
-        return birthday;
+        return (java.sql.Date) birthday;
     }
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
